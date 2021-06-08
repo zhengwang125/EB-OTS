@@ -1,6 +1,6 @@
 # MARL4TS
 
-This is the Implementation of our paper "Error-Bounded Online Trajectory Simplification with Multi-agent Reinforcement Learning" (KDD 2021).
+This is the implementation of our paper "Error-Bounded Online Trajectory Simplification with Multi-agent Reinforcement Learning" (KDD 2021).
 
 ## Requirements
 
