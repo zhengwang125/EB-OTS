@@ -13,7 +13,7 @@ def run_online_dqn(elist):
     for e in elist:
         env_rl.reset(e)
         while env_rl.e < env_rl.N:
-            observation_ow = env_rl.run_by_skip_value_5(e)
+            observation_ow = env_rl.run_by_skip_value_6(e)
             action_ow = RL_OW.online_act(observation_ow)
             observation_cw = env_rl.step_choose_safe_3(e, action_ow, err_bounded, k, 'V')
             if bool(1 - env_rl.conOpw):
@@ -43,7 +43,7 @@ def run_rl_comp_dqn():
         transition_cw = []
         
         while env_rl.e < env_rl.N:
-            observation_ow = env_rl.run_by_skip_value_5(episode)
+            observation_ow = env_rl.run_by_skip_value_6(episode)
             obs_ow.append(observation_ow)
             action_ow = RL_OW.act(observation_ow)
             observation_cw = env_rl.step_choose_safe_3(episode, action_ow, err_bounded, k, 'T')

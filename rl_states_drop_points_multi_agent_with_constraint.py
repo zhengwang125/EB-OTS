@@ -91,6 +91,9 @@ class TrajComp_rl():
         self.reward_rl = np.zeros(self.N)
         self.action_index_pre = 0
         self.accumulate = 0
+        self.accumulate_distance = np.sqrt((self.ori_traj_set[episode][self.origin_index + 1][1] - self.ori_traj_set[episode][self.origin_index][1])**2 + 
+                                           (self.ori_traj_set[episode][self.origin_index + 1][0] - self.ori_traj_set[episode][self.origin_index][0])**2)
+        self.accumulate_index = self.origin_index + 1
         
     def run_by_drop_num(self, episode, err_bounded, k, total_drop = 0):
         if F.sed_op(self.ori_traj_set[episode][self.origin_index:self.e+1]) > err_bounded:
@@ -219,6 +222,22 @@ class TrajComp_rl():
         B = ps[0] - pe[0]
         observation.append(np.sqrt(A * A + B * B))
         observation.append(self.e - self.origin_index)
+        return np.array(observation).reshape(-1,2)
+    
+    def run_by_skip_value_6(self, episode):
+        observation = []
+        ps = self.ori_traj_set[episode][self.origin_index]
+        pe = self.ori_traj_set[episode][self.e]
+        p_tmp = self.ori_traj_set[episode][self.accumulate_index]
+        A = pe[1] - ps[1]
+        B = pe[0] - ps[0]
+        C = pe[1] - p_tmp[1]
+        D = pe[0] - p_tmp[0]
+        tmp = np.sqrt(A * A + B * B)
+        self.accumulate_distance += np.sqrt(C * C + D * D)
+        observation.append(tmp/self.accumulate_distance)
+        observation.append(self.e - self.origin_index)
+        self.accumulate_index = self.e
         return np.array(observation).reshape(-1,2)
         
     def reward_1(self, action_index):

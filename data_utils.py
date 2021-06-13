@@ -263,6 +263,24 @@ def dad_error(ori_traj, sim_traj):
             start = c
     return t_map, error
 
+def dad_op_is_bounded_with_err(segment, err):
+    if len(segment) <= 2:
+        # print('segment error', 0.0)
+        return 0.0, True
+    else:
+        ps = segment[0]
+        pe = segment[-1]
+        e = 0.0
+        theta_0 = angle([ps[0], ps[1], pe[0], pe[1]])
+        for i in range(0, len(segment) - 1):
+            pm_0 = segment[i]
+            pm_1 = segment[i + 1]
+            theta_1 = angle([pm_0[0], pm_0[1], pm_1[0], pm_1[1]])
+            e = max(e, min(abs(theta_0 - theta_1), 2 * math.pi - abs(theta_0 - theta_1)))
+            if e > err:
+                return None, False
+        # print('segment error', e)
+        return e, True
 
 def get_point(ps, pe, segment, index):
     syn_time = segment[index][2]
@@ -291,6 +309,26 @@ def speed_op(segment):
         # print('segment error', e)
         return e
 
+def speed_op_is_bounded_with_err(segment, err):
+    if len(segment) <= 2:
+        # print('segment error', 0.0)
+        return 0.0, True
+    else:
+        ps = segment[0]
+        pe = segment[-1]
+        e = 0.0
+        for i in range(0, len(segment) - 1):
+            p_1, t_1 = get_point(ps, pe, segment, i)
+            p_2, t_2 = get_point(ps, pe, segment, i + 1)
+            time = 1 if t_2 - t_1 == 0 else abs(t_2 - t_1)
+            est_speed = np.linalg.norm(np.array(p_1) - np.array(p_2)) / time
+            rea_speed = np.linalg.norm(
+                np.array([segment[i][0], segment[i][1]]) - np.array([segment[i + 1][0], segment[i + 1][1]])) / time
+            e = max(e, abs(est_speed - rea_speed))
+            if e > err:
+                return None, False
+        # print('segment error', e)
+        return e, True
 
 def speed_error(ori_traj, sim_traj):
     # ori_traj, sim_traj = [[x,y,t],...,[x,y,t]]
