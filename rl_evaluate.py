@@ -13,7 +13,7 @@ def run_online_dqn(elist):
     for e in elist:
         env_rl.reset(e)
         while env_rl.e < env_rl.N:
-            observation_ow = env_rl.run_by_skip_value_5(e)
+            observation_ow = env_rl.run_by_skip_value_6(e)
             action_ow = RL_OW.online_act(observation_ow)
             observation_cw = env_rl.step_choose_safe_3(e, action_ow, err_bounded, k, 'V')
             if bool(1 - env_rl.conOpw):
@@ -44,8 +44,7 @@ if __name__ == "__main__":
     RL_OW = DeepQNetwork_OW(env_rl.n_features_ow, env_rl.n_actions_ow)
     RL_OW.load('./save/RL_OW_'+'your_trained_model'+'.h5')
     RL_CW = DeepQNetwork_CW(env_rl.n_features_cw, env_rl.n_actions_cw)
-    RL_CW.load('./save/RL_CW_'+'your_trained_model'+'.h5')    
+    RL_CW.load('./save/RL_CW_'+'your_trained_model'+'.h5')
     eva = run_online_dqn(list(range(traj_amount, traj_amount + valid_amount)))
-
     res = sum(eva) / len(eva)
     print("effectiveness", res)
