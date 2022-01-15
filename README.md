@@ -8,7 +8,7 @@ This is the implementation of our paper "Error-Bounded Online Trajectory Simplif
 * Python >= 3.5 (Anaconda3 is recommended and 3.6 is tested)
 * Tensorflow & Keras (1.8.0 and 2.2.0 are tested)
 
-Please refer to the source code to install the required packages that have not been installed in your environment such as matplotlib in Python for visualization. You can install these packages with conda in a shell as
+Please follow the recommended envirnoment and we noticed GPU (with Tensorflow 2) may not handle the model training/testing. Please refer to the source code to install the required packages that have not been installed in your environment such as matplotlib in Python for visualization. You can install these packages with conda in a shell as
 
 ```
 conda install matplotlib
